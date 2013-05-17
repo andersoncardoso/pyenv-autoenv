@@ -1,0 +1,57 @@
+#!/bin/bash
+# virtualenv-auto-activate.sh
+#
+# Installation:
+#   Add this line to your .bashrc or .bash-profile:
+#
+#       source /path/to/virtualenv-auto-activate.sh
+#
+
+function _python_version_auto_install() {
+    if [ -e ".python-version" ];then
+        _PY_VERSION=$(cat .python-version)
+        if [ ! -d "$HOME/.pyenv/versions/$_PY_VERSION" ];then
+            echo "Installing Python $_PY_VERSION"
+            pyenv install $_PY_VERSION
+            pyenv rehash
+        fi
+
+    fi
+}
+
+function _virtualenv_auto_activate() {
+    if [ -e ".python-env" ]; then
+        # Check for file containing name of virtualenv
+        if [ -f ".python-env" ]; then
+          _VENV_PATH=$WORKON_HOME/$(cat .python-env)
+        else
+          return
+        fi
+
+        # Check to see if already activated to avoid redundant activating
+        if [ "$VIRTUAL_ENV" != $_VENV_PATH ]; then
+          _VENV_NAME=$(basename $_VENV_PATH)
+          # if venv does not exists create
+          if [ -d "$_VENV_PATH" ];then
+            workon $_VENV_NAME
+          else
+            echo "Virtualenv $_VENV_NAME does not exist. Adding with current python -> $(cat .python-version)"
+            mkvirtualenv $_VENV_NAME --python $HOME/.pyenv/versions/$(cat .python-version)/bin/python
+            workon $_VENV_NAME
+          fi
+          # echo Activated virtualenv \"$_VENV_NAME\".
+        fi
+    fi
+}
+
+function _autoenv_activate() {
+    _python_version_auto_install
+    _virtualenv_auto_activate
+}
+
+export PROMPT_COMMAND=_autoenv_activate
+if [ -n "$ZSH_VERSION" ]; then
+  function chpwd() {
+    _autoenv_activate
+  }
+fi
