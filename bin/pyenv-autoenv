@@ -50,7 +50,7 @@ function _autoenv_activate() {
 }
 
 if [[ $PROMPT_COMMAND =~ ^.*\;[[:space:]$'\n'$'\r']*$ ]]; then
-    export PROMPT_COMMAND="${PROMPT_COMMAND%;*}; "
+    export PROMPT_COMMAND="${PROMPT_COMMAND%;*}"
 fi
 export PROMPT_COMMAND="$([[ $PROMPT_COMMAND ]] && echo "${PROMPT_COMMAND}; ")_autoenv_activate"
 if [ -n "$ZSH_VERSION" ]; then
