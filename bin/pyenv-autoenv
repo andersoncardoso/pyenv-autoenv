@@ -10,7 +10,7 @@
 function _python_version_auto_install() {
     if [ -e ".python-version" ];then
         _PY_VERSION=$(cat .python-version)
-        if [ ! -d "$HOME/.pyenv/versions/$_PY_VERSION" ];then
+        if [ ! -d "$PYENV_ROOT/versions/$_PY_VERSION" ];then
             echo "Installing Python $_PY_VERSION"
             pyenv install $_PY_VERSION
             pyenv rehash
@@ -36,7 +36,7 @@ function _virtualenv_auto_activate() {
             workon $_VENV_NAME
           else
             echo "Virtualenv $_VENV_NAME does not exist. Adding with current python -> $(cat .python-version)"
-            mkvirtualenv $_VENV_NAME --python $HOME/.pyenv/versions/$(cat .python-version)/bin/python
+            mkvirtualenv $_VENV_NAME --python $PYENV_ROOT/versions/$(cat .python-version)/bin/python
             workon $_VENV_NAME
           fi
           # echo Activated virtualenv \"$_VENV_NAME\".
