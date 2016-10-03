@@ -1,6 +1,8 @@
 ## install:
 
-1-) first install pyenv:
+0-) You need to have **virtualenvwrapper** installed
+
+1-) first install **pyenv**:
 
     git clone git://github.com/yyuu/pyenv.git ~/.pyenv
     
