@@ -10,7 +10,7 @@
 function _python_version_auto_install() {
     if [ -e ".python-version" ];then
         _PY_VERSION=$(cat .python-version)
-        if [ ! -d "$PYENV_ROOT/versions/$_PY_VERSION" ];then
+        if [ "$_PY_VERSION" != "system" -a ! -d "$PYENV_ROOT/versions/$_PY_VERSION" ];then
             echo "Installing Python $_PY_VERSION"
             pyenv install $_PY_VERSION
             pyenv rehash
